@@ -50,15 +50,21 @@ h3{
     border : 1px solid #000814;
     color :#fdfcdc;
     font-size: 15px;
-    display : none;
 }
 .next-btn:hover{
     background-color:  #01122d;
     cursor : pointer;
 }
-.correct{
-    background-color: #99d98c;
+.correct {
+    background-color: #76c893;
+    color: white;
 }
-.incorrect{
-    background-color: #e76f51;
+
+.incorrect {
+    background-color: #f07167;
+    color: white;
+}
+
+.next-btn {
+    display: none;
 }
