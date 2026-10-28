@@ -68,3 +68,18 @@ h3{
 .next-btn {
     display: none;
 }
+.Restart{
+   background-color: #000f28;
+   color :white;
+   height : 40px;
+   width : 120px;
+   font-size: 20px; 
+   border : none;
+   border-radius: 10px;
+   margin-left: 130px;
+   margin-top: 40px;
+}
+.Restart:hover{
+    background-color:  #071c3c;
+    cursor : pointer;
+}

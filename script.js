@@ -1,12 +1,3 @@
-
-const getQues = document.querySelector(".ques");
-const buttons = document.querySelectorAll(".btn");
-const nxtButton = document.querySelector(".next-btn");
-
-let currentIdx = 0;
-let score = 0;
-let answered = false;
-
 const questions = [
     {
         question: "What is the brain of a computer?",
@@ -117,91 +108,76 @@ const questions = [
         ]
     }
 ];
-
-function showQuestion() {
-    resetState();
-
-    const currentQues = questions[currentIdx];
-
-    getQues.textContent =
-        `${currentIdx + 1}. ${currentQues.question}`;
-
-    buttons.forEach((button, i) => {
-        button.textContent = currentQues.answers[i].text;
-        button.style.display = "block";
+let ques = document.querySelector('.ques');
+let ans = document.querySelector('.ans');
+let ansbtns = document.querySelectorAll('.btn');
+let next = document.querySelector('.next-btn');
+let result = document.querySelector('.result');
+let box = document.querySelector('#heading');
+let scr = document.querySelector('.score');
+let restart = document.querySelector('.Restart');
+let score = 0;
+let currentIndex = 0;
+let answeredByUser = false;
+function showQuestion(){
+    restart.style.display='none';
+    scr.style.display='none';
+    let currentQuestion = questions[currentIndex];
+    ques.innerText = `${currentIndex + 1}. ${currentQuestion.question}`;
+    ansbtns.forEach((btn,i) => {
+        btn.innerText = currentQuestion.answers[i].text; 
     });
 }
-
-function resetState() {
-    answered = false;
-    nxtButton.style.display = "none";
-
-    buttons.forEach(button => {
-        button.disabled = false;
-        button.classList.remove("correct", "incorrect");
-        delete button.dataset.correct;
-    });
-}
-
-function selectAnswer(event) {
-    if (answered) return;
-
-    answered = true;
-
-    const selectedButton = event.currentTarget;
-    const currentQues = questions[currentIdx];
-    const selectedIndex = Array.from(buttons).indexOf(selectedButton);
-    const selectedAnswer = currentQues.answers[selectedIndex];
-
-    if (selectedAnswer.correct) {
-        score++;
-    }
-
-    buttons.forEach((button, i) => {
-        if (currentQues.answers[i].correct) {
-            button.classList.add("correct");
-        } else if (button === selectedButton) {
-            button.classList.add("incorrect");
+ansbtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        if (answeredByUser) {
+            return;
         }
-
-        button.disabled = true;
+        answeredByUser = true;
+        next.style.display = 'block';
+        let currentQuestion = questions[currentIndex];
+        ansbtns.forEach((button, index) => {
+            if (currentQuestion.answers[index].correct) {
+                button.classList.add('correct');
+            }
+        });
+        if (currentQuestion.answers[i].correct) {
+            score++;
+        } else {
+            btn.classList.add('incorrect');
+        }
     });
-
-    nxtButton.style.display = "block";
-}
-
-buttons.forEach(button => {
-    button.addEventListener("click", selectAnswer);
 });
-
-nxtButton.addEventListener("click", () => {
-    if (currentIdx < questions.length - 1) {
-        currentIdx++;
-        showQuestion();
-    } else if (currentIdx === questions.length - 1) {
-        showResult();
-    } else {
-        currentIdx = 0;
-        score = 0;
-        nxtButton.textContent = "Next";
-        showQuestion();
+next.addEventListener('click',()=>{
+    answeredByUser = false;
+    next.style.display = 'none';
+    currentIndex++;
+    ansbtns.forEach((btn)=>{
+        btn.classList.remove('correct','incorrect');
+    })
+    if(currentIndex >= questions.length){
+         showResult();
+         return;
     }
-});
-
-function showResult() {
-    resetState();
-
-    getQues.textContent =
-        `Quiz Finished! Your score is ${score}/${questions.length}`;
-
-    buttons.forEach(button => {
-        button.style.display = "none";
-    });
-
-    nxtButton.textContent = "Play Again";
-    nxtButton.style.display = "block";
-
-    currentIdx = questions.length;
+    showQuestion();
+})
+function showResult(){
+    box.style.display ="none";
+    ans.style.display ="none";
+    scr.style.display='block';
+    ques.innerHTML = "<h2><b>Quiz Completed!</b></h2><h3>ScoreBoard</h3>";
+    scr.innerHTML = `<h4>Your Score : ${score} / ${questions.length}</h4>`;
+    restart.style.display = "block";
+    restart.addEventListener('click',()=>{
+    score = 0;
+    currentIndex = 0;
+    answeredByUser = false;
+    box.style.display ="block";
+    ans.style.display='block';
+    showQuestion();
+     ansbtns.forEach((btn)=>{
+        btn.classList.remove('correct','incorrect');
+    })
+    })
 }
-
 showQuestion();
